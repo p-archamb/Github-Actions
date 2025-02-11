@@ -67,9 +67,9 @@ jobs:
       - name: Build and Test
         run: ./gradlew build
         env:
-          DATASOURCES_DEFAULT_URL: jdbc:mysql://localhost:3306/#{{ secrets.DB_NAME }}
-          DATASOURCES_DEFAULT_USERNAME: {{ secrets.DB_USERNAME }}
-          DATASOURCES_DEFAULT_PASSWORD: {{ secrets.DB_PASSWORD }}
+          DATASOURCES_DEFAULT_URL: jdbc:mysql://localhost:3306/${{ secrets.DB_NAME }}
+          DATASOURCES_DEFAULT_USERNAME: ${{ secrets.DB_USERNAME }}
+          DATASOURCES_DEFAULT_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       #Save the built jar file
       - name: Upload JAR as Build Artifact
