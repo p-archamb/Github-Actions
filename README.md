@@ -1,4 +1,4 @@
-## Introduction to Micronautv2
+## Introduction to Micronaut
 This is a sample project in micronaut that draws the basic idea of:
 - CRUD operation
 - Connecting to a MySql database
