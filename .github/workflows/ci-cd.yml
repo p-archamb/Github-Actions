@@ -39,7 +39,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Set up Java(we need JVM to run Jar file)
+      # Set up Java(need JVM to run Jar file)
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -63,7 +63,7 @@ jobs:
       - name: Verify MySQL connection
         run: mysql -h"127.0.0.1" -P"3306" -uroot -ppassword -e "SHOW DATABASES;"
 
-      #Build and test application
+      #Build jar file
       - name: Build and Test
         run: ./gradlew build
         env:
@@ -71,10 +71,27 @@ jobs:
           DATASOURCES_DEFAULT_USERNAME: ${{ secrets.DB_USERNAME }}
           DATASOURCES_DEFAULT_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
-      #Save the built jar file
+      #Save the built jar file to github actions artifacts
       - name: Upload JAR as Build Artifact
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: micronaut-crud-app
           path: build/libs/*.jar
+
+      # Save jar file to AWS S3 (Permanent cloud storage)
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload to S3
+        run: aws s3 cp build/libs/*.jar s3://${{ secrets.S3_BUCKET }}/artifacts/
+
+      # Save jar file to GitHub Packages (Maven repository)
+      - name: Publish to GitHub Packages
+        run: ./gradlew publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
