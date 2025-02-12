@@ -12,6 +12,9 @@ on:
 jobs:
   # Name of job
   build-and-test:
+    permissions: #gives workflow permission to write to github packages and ready repository contents
+      contents: read
+      packages: write 
     # Only run if PR was actually merged, not just closed
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest # use ubuntu as OS. Creates ubuntu VM on github infrastructure
