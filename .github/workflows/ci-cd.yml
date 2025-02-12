@@ -89,7 +89,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Upload to S3
-        run: aws s3 cp build/libs/*.jar s3://${{ secrets.S3_BUCKET }}/artifacts/
+        run: aws s3 cp build/libs/micronaut-crud-0.1.jar "s3://${{ secrets.S3_BUCKET }}/artifacts/"
 
       # Save jar file to GitHub Packages (Maven repository)
       - name: Publish to GitHub Packages
